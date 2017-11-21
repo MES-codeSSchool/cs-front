@@ -3,14 +3,14 @@ module Codeschool.Msg exposing (..)
 {-| Main page messages and update function
 -}
 
-import Codeschool.Model exposing (Model, Route)
+import Codeschool.Model exposing (Model, Route, Language)
 import Codeschool.Routing exposing (parseLocation, reverse)
 import Data.Date exposing (..)
 import Data.User exposing (..)
 import Data.Registration exposing (..)
 import Data.Login exposing (..)
 import Http exposing (..)
-import Json.Decode exposing (string)
+import Json.Decode exposing (..)
 import Navigation exposing (Location, back, newUrl)
 
 
@@ -328,3 +328,22 @@ andThen msg ( model, cmd ) =
             update msg model
     in
         newmodel ! [ cmd, newcmd ]
+
+
+language : Json.Decode.Decoder Language
+language =
+    Json.Decode.map5 Language
+        (field "url" string)
+        (field "ref" string)
+        (field "name" string)
+        (field "comments" string)
+        (field "is_supported" bool)
+
+
+listLanguage : Json.Decode (List Language)
+listLanguage =
+    Json.List language
+
+get : Platform.Task Http.Error (List Language)
+get =
+  Http.get listLanguage "http://127.0.0.1:8000/api/programming-languages/"
