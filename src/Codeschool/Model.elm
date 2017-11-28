@@ -3,7 +3,6 @@ module Codeschool.Model
         ( Model
         , Route(..)
         , init
-        , Language
         )
 
 {-| Page model components.
@@ -34,17 +33,7 @@ type alias Model =
     , toast : Toast String
     , auth : Auth
     , isLogged : Bool
-    , languages : List Language
     }
-
-
-type alias Language =
-  { url : String
-  , ref : String
-  , name : String
-  , comments : String
-  , is_supported : Bool
-  }
 
 
 {-| Starts the main model to default state.
@@ -65,7 +54,6 @@ init =
     , toast = Toast.initWithTransitionDelay (Time.second * 1.5)
     , auth = emptyAuth
     , isLogged = False
-    , languages = []
     }
 
 

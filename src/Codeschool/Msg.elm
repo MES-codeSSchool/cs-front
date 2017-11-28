@@ -3,12 +3,13 @@ module Codeschool.Msg exposing (..)
 {-| Main page messages and update function
 -}
 
-import Codeschool.Model exposing (Model, Route, Language)
+import Codeschool.Model exposing (Model, Route)
 import Codeschool.Routing exposing (parseLocation, reverse)
 import Data.Date exposing (..)
 import Data.User exposing (..)
 import Data.Registration exposing (..)
 import Data.Login exposing (..)
+import Data.Language exposing (..)
 import Http exposing (..)
 import Json.Decode exposing (..)
 import Navigation exposing (Location, back, newUrl)
@@ -29,6 +30,8 @@ type Msg
     | GetRegistrationResponse (Result Http.Error ExpectRegisterResponse)
     | GetProfileResponse (Result Http.Error ProfileForm)
     | GetLoginResponse (Result Http.Error Auth)
+    | GetLanguage
+    | GetLanguageResponse (Result Http.Error (List Language))
     | LoginAfterRegistration
     | ContinueRegistration
     -- Form handling
@@ -112,6 +115,21 @@ update msg model =
             Debug.log("Continuando Registro")
             (model, test)
 
+        -- GetLanguage ->
+        --     ( model, Http.send GotLanguage getLanguage )
+        --
+        -- GotLanguage result ->
+        --     case result of
+        --         Err httpError ->
+        --             let
+        --                 _ =
+        --                     Debug.log "handleLanguageError" httpError
+        --             in
+        --                 ( model, Cmd.none )
+        --
+        --         Ok ref ->
+        --             ( { model | ref = ref }, Cmd.none )
+
 -- Errors Responses
         GetLoginResponse (Result.Err _) ->
           Debug.log("Erro Geral GetLogin")
@@ -139,6 +157,9 @@ update msg model =
         GetProfileResponse (Err _) ->
           Debug.log("Erro Geral GetProfile")
           (model, Cmd.none)
+
+        GetLanguage ->
+          { model | message = "Initin" }
 
 
 -- Form handling
@@ -330,20 +351,23 @@ andThen msg ( model, cmd ) =
         newmodel ! [ cmd, newcmd ]
 
 
-language : Json.Decode.Decoder Language
-language =
-    Json.Decode.map5 Language
-        (field "url" string)
-        (field "ref" string)
-        (field "name" string)
-        (field "comments" string)
-        (field "is_supported" bool)
-
-
-listLanguage : Json.Decode (List Language)
+listLanguage : Json.Decode.Decoder ( List Data.Language.Language )
 listLanguage =
-    Json.List language
+    Json.Decode.list language
 
-get : Platform.Task Http.Error (List Language)
-get =
-  Http.get listLanguage "http://127.0.0.1:8000/api/programming-languages/"
+
+getLanguages : Cmd Msg
+getLanguages =
+    let
+        languageRequest =
+            Http.request
+                { body = []
+                , expect = Http.expectJson Data.Language.language
+                , headers = []
+                , method = "GET"
+                , timeout = Nothing
+                , url = "http://localhost:8000/api/programming-languages/"
+                , withCredentials = False
+                }
+    in
+        languageRequest |> Http.send GetLanguageResponse
