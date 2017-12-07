@@ -36,6 +36,7 @@ type alias Model =
     , isLogged : Bool
     , markdownToString : String
     , suportedLanguanges : ProgrammingLanguage
+    , selectedLanguange: String
     }
 
 
@@ -65,6 +66,7 @@ init =
                 - a) A idade dessa pessoa.
                 - b) Quantos anos essa pessoa terá  em 2018.
                 """
+    , selectedLanguange = "javascript"
     }
 
 

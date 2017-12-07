@@ -54,7 +54,7 @@ getRouteView model =
             Page.Questions.QuestionList.viewList Page.Questions.QuestionList.clsList
 
         Question string slug ->
-            Page.Questions.Code.viewDetail Page.Questions.Code.question
+            Page.Questions.Code.viewDetail model
 
         QuestionRoot ->
             Page.Questions.QuestionRoot.viewList Page.Questions.QuestionRoot.clsList

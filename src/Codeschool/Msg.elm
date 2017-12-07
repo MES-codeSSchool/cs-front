@@ -43,6 +43,8 @@ type Msg
     | UpdateDate String String
     | UpdateLogin String String
     | LogOut
+    -- set values to store
+    | SetCodeLanguageType Int
 
 {-| Update function
 -}
@@ -192,7 +194,27 @@ update msg model =
             {model | auth = emptyAuth, isLogged = False } ! []
             |> andThen (ChangeRoute Codeschool.Model.Index)
 
+        SetCodeLanguageType value ->
+          Debug.log "Errrrrouuuuuuuuu"
+          ({ model | selectedLanguange = mapLanguageToString value }, Cmd.none)
 
+
+
+mapLanguageToString : Int -> String
+mapLanguageToString value =
+  case value of
+    1 ->
+      "c"
+    2 ->
+      "python"
+    3 ->
+      "java"
+    4 ->
+      "elm"
+    5 ->
+      "javascript"
+    _ ->
+      "javascript"
 
 userErrorUpdate : UserError -> String -> UserError
 userErrorUpdate userError response =

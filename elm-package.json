@@ -18,7 +18,8 @@
         "evancz/url-parser": "2.0.1 <= v < 3.0.0",
         "iosphere/elm-toast": "1.0.0 <= v < 2.0.0",
         "krisajenkins/remotedata": "4.3.0 <= v < 5.0.0",
-        "DenisKolodin/elm-ace": "2.3.0 <= v <= 2.3.0"
+        "DenisKolodin/elm-ace": "2.3.0 <= v <= 2.3.0",
+        "elm-community/html-extra": "2.2.0 <= v <= 2.2.0"
     },
     "dependency-sources": {
       "DenisKolodin/elm-ace": "https://github.com/DenisKolodin/elm-ace.git"

@@ -1,9 +1,11 @@
 module Page.Questions.Code exposing (viewDetail, question)
-import Codeschool.Msg exposing (Msg)
-import Codeschool.Msg as Msg exposing (Msg)
+import Codeschool.Model exposing (..)
+import Codeschool.Msg exposing (..)
 import Data.Question exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (on)
+import Html.Events.Extra exposing (..)
 import Ui.Parts exposing (promoSimple, promoTable, simpleHero)
 import Json.Decode as Json
 import Dict
@@ -12,9 +14,9 @@ import Dict
 import Html.Events exposing (..)
 import Ace
 
-viewDetail : CodeQuestion -> Html Msg
-viewDetail cls =
-    div [ onClick Msg.DispatchLogin ]
+viewDetail : Model -> Html Msg
+viewDetail model =
+    div [ onClick Codeschool.Msg.DispatchLogin ]
         [ simpleHero question.questionInfo.title "" "simple-hero__page-blue"
         , div [ class "question-description" ]
             [
@@ -25,17 +27,19 @@ viewDetail cls =
         - b) Quantos anos essa pessoa terá  em 2018."""
             ]
 
-          , select [ class "select-language"]
-              [ option [ value "", disabled True, selected True, class "disabled-item" ] [ text "Select language" ]
-              , option [ value "C" ] [ text "C" ]
-              , option [ value "Python" ] [ text "Python" ]
-              , option [ value "Java" ] [ text "Java" ]
-              , option [ value "elm" ] [ text "elm" ]
-              , option [ value "Javascript" ] [ text "JavaS" ]
+          , select [ class "select-language", on "change" (Json.map Codeschool.Msg.SetCodeLanguageType targetValueIntParse) ]
+              [ option [ value "0", disabled True, selected True, class "disabled-item" ] [ text "Select language" ]
+              , option [ value "1" ] [ text "C" ]
+              , option [ value "2" ] [ text "Python" ]
+              , option [ value "3" ] [ text "Java" ]
+              , option [ value "4" ] [ text "elm" ]
+              , option [ value "5" ] [ text "Java Script" ]
               ]
           , div [ class "item-question"]
-              [ aceEditor "javascript"]
+              [ aceEditor model.selectedLanguange]
           , button [ class "send-button" ] [ text "Send to evaluation" ]
+          , div [] [ text <| "Selected: " ++ (toString model.selectedLanguange) ]
+          -- , button [ class "send-button", onClick Msg.GetLanguagesSuported ] [ text "Request Data" ]
         ]
 
 question : CodeQuestion
